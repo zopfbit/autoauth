@@ -5,19 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>AutoAuth</title>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-            width: 300px;
-            margin: 0;
-            padding: 12px;
-        }
-
-        h1 {
-            font-size: 16px;
-            margin: 0 0 10px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
@@ -39,26 +27,19 @@
             <textarea id="matrixInput" rows="6" style="width:100%"></textarea>
             <div style="margin-top:8px">
                 <button id="btn-save">Save</button>
-                <button id="btn-cancel">Cancel</button>
+                <button id="btn-back-home-edit">Back</button>
             </div>
             <div id="saveStatus" style="margin-top:8px;font-size:13px;color:#444"></div>
-            <button id="btn-back-home">Back</button>
         </section>
 
-        <section id="upload-pdf" class="page" style="display:none">
-            <p>Is in TODO</p>
+        <section id="upload" class="page" style="display:none">
             <p>Upload your identity matrix</p>
-            <form action="/background.js">
-                <input type="file" id="myFile" name="filename">
-                <input type="submit">
-            </form>
-            <button id="btn-back-home">Back</button>
+            <input type="file" id="myFile" name="filename" accept="application/pdf">
+            <button id="btn-back-home-upload">Back</button>
         </section>
     </div>
-
-    <script src="popup.js">
-
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.239/pdf.min.js"></script>
+    <script src="popup.js"></script>
 </body>
 
 </html>

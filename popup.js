@@ -1,70 +1,84 @@
-
-// MV2 background script: handle runtime messages to get/set matrix per-locale
-// Keys are stored as matrix_<locale>
-import * as pdfjsLib from "pdfjs-dist";
-
-async function extractTextFromPDF(file) {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let text = '';
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        text += content.items.map(item => item.str).join(' ') + '\n';
+function formatMatrixWithNewlines(array, groupSize = 9) {
+    const result = [];
+    for (let i = 0; i < array.length; i += groupSize) {
+        const group = array.slice(i, i + groupSize);
+        result.push(group.join(','));
     }
-
-    return text;
+    return result.join(',\n');
 }
 
 document.addEventListener("DOMContentLoaded", function () {
     const homeSection = document.getElementById("home");
     const editSection = document.getElementById("edit");
-    const uploadSection = document.getElementById("upload-pdf");
+    const uploadSection = document.getElementById("upload");
     const matrixDisplay = document.getElementById("matrix");
     const matrixInput = document.getElementById("matrixInput");
     const saveStatus = document.getElementById("saveStatus");
 
-    const storedMatrix = localStorage.getItem("matrix");
-    if (storedMatrix) {
-        matrixDisplay.textContent = storedMatrix;
-    }
+    (async () => {
+        try {
+            const result = await browser.storage.local.get('matrix');
+            if (result.matrix && Array.isArray(result.matrix)) {
+                matrixDisplay.textContent = formatMatrixWithNewlines(result.matrix);
+            } else {
+                matrixDisplay.textContent = "No matrix found.";
+            }
+        } catch (err) {
+            console.error("Error retrieving matrix:", err);
+        }
+    })();
 
-    document.getElementById("btn-edit").addEventListener("click", function () {
+    document.getElementById("btn-edit").addEventListener("click", () => {
         homeSection.style.display = "none";
         editSection.style.display = "block";
+        uploadSection.style.display = "none";
     });
 
-    document.getElementById("btn-upload").addEventListener("click", function () {
+    document.getElementById("btn-upload").addEventListener("click", () => {
         homeSection.style.display = "none";
         uploadSection.style.display = "block";
+        editSection.style.display = "none";
     });
 
-    document.getElementById("btn-back-home").addEventListener("click", function () {
+    document.getElementById("btn-back-home-edit").addEventListener("click", () => {
         homeSection.style.display = "block";
         uploadSection.style.display = "none";
         editSection.style.display = "none";
     });
 
-    document.getElementById("btn-save").addEventListener("click", function () {
+    document.getElementById("btn-back-home-upload").addEventListener("click", () => {
+        homeSection.style.display = "block";
+        uploadSection.style.display = "none";
+        editSection.style.display = "none";
+    });
+
+    document.getElementById("btn-save").addEventListener("click", async () => {
+        console.log("Save button clicked");
+
         const inputValue = matrixInput.value.trim();
         if (inputValue) {
-            // Validate and save the matrix
             try {
-                const matrix = JSON.parse(inputValue);
-                matrixDisplay.textContent = JSON.stringify(matrix, null, 2);
+                let matrix = JSON.parse(inputValue);
+                matrix = matrix.map(row =>
+                    row.map(el => String(el)
+                        .replace(/[\s"\n]/g, ''))
+                );
+
+                matrixDisplay.textContent = formatMatrixWithNewlines(matrix);
                 saveStatus.textContent = "Matrix saved successfully!";
                 saveStatus.style.color = "green";
-                localStorage.setItem("matrix", JSON.stringify(matrix));
+
+                browser.storage.local.set({ matrix: matrix });
             } catch (e) {
-                const commaSeparated = inputValue.split(',').map(item => item.trim());
+                let commaSeparated = inputValue.split(',').map(item => item.trim().replace(/[\s"\[\]\n]/g, ''));
                 if (commaSeparated.length > 0) {
-                    matrixDisplay.textContent = JSON.stringify(commaSeparated);
+                    matrixDisplay.textContent = formatMatrixWithNewlines(commaSeparated);
                     saveStatus.textContent = "Matrix saved successfully!";
                     saveStatus.style.color = "green";
-                    localStorage.setItem("matrix", JSON.stringify(matrix));
+
+                    browser.storage.local.set({ matrix: commaSeparated });
                 } else {
-                    saveStatus.textContent = "Invalid input. Please enter valid JSON or comma-separated values.";
+                    saveStatus.textContent = "Invalid input. Must contain exactly 49 elements.";
                     saveStatus.style.color = "red";
                 }
             }
@@ -72,11 +86,5 @@ document.addEventListener("DOMContentLoaded", function () {
             saveStatus.textContent = "Input cannot be empty.";
             saveStatus.style.color = "red";
         }
-    });
-
-    document.getElementById("btn-cancel").addEventListener("click", function () {
-        editSection.style.display = "none";
-        homeSection.style.display = "block";
-        saveStatus.textContent = ""; // Clear previous save status
     });
 });
