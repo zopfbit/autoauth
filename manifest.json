@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "AutoAuth",
+    "version": "0.1.0",
+    "description": "Lightweight extension to assist with 2FA",
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_title": "AutoAuth"
+    },
+    "permissions": [
+        "storage",
+        "activeTab",
+        "tabs"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://identity.fu-berlin.de/idp-fub/profile/SAML2/Redirect/*",
+                "http://localhost/*"
+            ],
+            "js": [
+                "background.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ]
+}

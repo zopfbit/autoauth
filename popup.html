@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AutoAuth</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+            width: 300px;
+            margin: 0;
+            padding: 12px;
+        }
+
+        h1 {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AutoAuth</h1>
+
+    <div id="pages">
+        <section id="home" class="page">
+            <p id="desc">A tiny helper for 2FA</p>
+            <p><strong>Stored matrix:</strong></p>
+            <pre id="matrix">(none)</pre>
+            <div>
+                <button id="btn-edit">Edit Matrix</button>
+                <button id="btn-upload">Upload Matrix</button>
+            </div>
+        </section>
+
+        <section id="edit" class="page" style="display:none">
+            <label for="matrixInput">Input Matrix (JSON or comma-separated):</label>
+            <textarea id="matrixInput" rows="6" style="width:100%"></textarea>
+            <div style="margin-top:8px">
+                <button id="btn-save">Save</button>
+                <button id="btn-cancel">Cancel</button>
+            </div>
+            <div id="saveStatus" style="margin-top:8px;font-size:13px;color:#444"></div>
+            <button id="btn-back-home">Back</button>
+        </section>
+
+        <section id="upload-pdf" class="page" style="display:none">
+            <p>Is in TODO</p>
+            <p>Upload your identity matrix</p>
+            <form action="/background.js">
+                <input type="file" id="myFile" name="filename">
+                <input type="submit">
+            </form>
+            <button id="btn-back-home">Back</button>
+        </section>
+    </div>
+
+    <script src="popup.js">
+
+    </script>
+</body>
+
+</html>
