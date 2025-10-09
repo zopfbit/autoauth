@@ -23,7 +23,7 @@ function updateDict(rawMatrix) {
     containers.forEach((container, index) => {
         const input = container.querySelector('input.digit-input');
 
-        if (input && values[index] !== undefined && index < 5) {
+        if (input && values[index] !== undefined && matrix[values[index]] !== undefined) {
             input.value = matrix[values[index]];
             input.dispatchEvent(new Event('input', { bubbles: true }));
             input.dispatchEvent(new Event('change', { bubbles: true }));

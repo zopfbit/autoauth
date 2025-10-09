@@ -18,27 +18,21 @@
             <pre id="matrix">(none)</pre>
             <div>
                 <button id="btn-edit">Edit Matrix</button>
-                <button id="btn-upload">Upload Matrix</button>
             </div>
         </section>
 
         <section id="edit" class="page" style="display:none">
-            <label for="matrixInput">Input Matrix (JSON or comma-separated):</label>
+            <label for="matrixInput">Input Matrix:</label>
             <textarea id="matrixInput" rows="6" style="width:100%"></textarea>
             <div style="margin-top:8px">
+                <p>View the <a href="https://zopfbit.github.io/matrix-extractor/">site</a> to convert your PDF into an
+                    formatable array!</p>
                 <button id="btn-save">Save</button>
                 <button id="btn-back-home-edit">Back</button>
             </div>
             <div id="saveStatus" style="margin-top:8px;font-size:13px;color:#444"></div>
         </section>
-
-        <section id="upload" class="page" style="display:none">
-            <p>Upload your identity matrix</p>
-            <input type="file" id="myFile" name="filename" accept="application/pdf">
-            <button id="btn-back-home-upload">Back</button>
-        </section>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.239/pdf.min.js"></script>
     <script src="popup.js"></script>
 </body>
 
