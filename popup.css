@@ -86,19 +86,3 @@ textarea {
     display: flex;
     flex-wrap: wrap;
 }
-
-.drop-area {
-    border: 2px dashed #007BFF;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    transition: background-color 0.3s;
-}
-
-.drop-area.hover {
-    background-color: #f0f8ff;
-}
-
-.drop-area p {
-    margin: 0;
-}

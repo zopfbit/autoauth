@@ -10,7 +10,6 @@ function formatMatrixWithNewlines(array, groupSize = 9) {
 document.addEventListener("DOMContentLoaded", function () {
     const homeSection = document.getElementById("home");
     const editSection = document.getElementById("edit");
-    const uploadSection = document.getElementById("upload");
     const matrixDisplay = document.getElementById("matrix");
     const matrixInput = document.getElementById("matrixInput");
     const saveStatus = document.getElementById("saveStatus");
@@ -31,24 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btn-edit").addEventListener("click", () => {
         homeSection.style.display = "none";
         editSection.style.display = "block";
-        uploadSection.style.display = "none";
-    });
-
-    document.getElementById("btn-upload").addEventListener("click", () => {
-        homeSection.style.display = "none";
-        uploadSection.style.display = "block";
-        editSection.style.display = "none";
     });
 
     document.getElementById("btn-back-home-edit").addEventListener("click", () => {
         homeSection.style.display = "block";
-        uploadSection.style.display = "none";
-        editSection.style.display = "none";
-    });
-
-    document.getElementById("btn-back-home-upload").addEventListener("click", () => {
-        homeSection.style.display = "block";
-        uploadSection.style.display = "none";
         editSection.style.display = "none";
     });
 
@@ -86,64 +71,5 @@ document.addEventListener("DOMContentLoaded", function () {
             saveStatus.textContent = "Input cannot be empty.";
             saveStatus.style.color = "red";
         }
-    });
-
-    const dropArea = document.getElementById('drop-area');
-
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false);
-        document.body.addEventListener(eventName, preventDefaults, false);
-    });
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropArea.addEventListener(eventName, highlight, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, unhighlight, false);
-    });
-
-    dropArea.addEventListener('drop', handleDrop, false);
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    function highlight() {
-        dropArea.classList.add('hover');
-    }
-
-    function unhighlight() {
-        dropArea.classList.remove('hover');
-    }
-
-    function handleDrop(e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-
-        handleFiles(files);
-    }
-
-    function handleFiles(files) {
-        const file = files[0];
-        if (file && file.type === 'application/pdf') {
-            alert(`File ${file.name} uploaded successfully!`);
-            // You can add further processing here, like uploading the file to a server
-        } else {
-            alert('Please upload a valid PDF file.');
-        }
-    }
-
-    // Optional: Allow clicking to open file dialog
-    dropArea.addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'application/pdf';
-        input.onchange = (e) => {
-            const files = e.target.files;
-            handleFiles(files);
-        };
-        input.click();
     });
 });
